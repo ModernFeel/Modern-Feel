@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Feel - Online Shopping</title>
     
-    <!-- Font Awesome Icons & Netlify Identity Widget -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
@@ -25,7 +24,6 @@
             color: #333;
         }
 
-        /* Top Header - RED Color */
         header {
             background-color: var(--primary-red);
             color: white;
@@ -104,14 +102,9 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
-        .cart-btn:hover {
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        /* Navigation Bar */
+        /* Category Navigation Bar */
         nav {
             background-color: var(--dark-red);
             padding: 8px 5%;
@@ -122,15 +115,19 @@
         nav a {
             color: white;
             text-decoration: none;
-            padding: 8px 14px;
+            padding: 8px 16px;
             display: inline-block;
             font-size: 0.85rem;
             font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
         }
 
-        nav a:hover {
-            background-color: rgba(255,255,255,0.15);
-            border-radius: 4px;
+        nav a:hover, nav a.active {
+            background-color: var(--yellow-accent);
+            color: #333;
+            font-weight: bold;
         }
 
         .container {
@@ -139,7 +136,6 @@
             padding: 0 15px;
         }
 
-        /* Hero Banner */
         .hero-banner {
             background: linear-gradient(135deg, #d63031, #ff7675);
             color: white;
@@ -150,12 +146,6 @@
             margin-bottom: 30px;
         }
 
-        .hero-banner h2 {
-            font-size: 2.2rem;
-            margin: 0 0 10px 0;
-        }
-
-        /* Deals Section */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -171,7 +161,6 @@
             color: #2c3e50;
         }
 
-        /* Products Grid */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -196,15 +185,14 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
-        .badge {
+        .category-badge {
             position: absolute;
             top: 10px;
-            right: 10px;
-            background: #e74c3c;
+            left: 10px;
+            background: rgba(0,0,0,0.6);
             color: white;
             padding: 3px 8px;
-            font-size: 0.75rem;
-            font-weight: bold;
+            font-size: 0.7rem;
             border-radius: 3px;
         }
 
@@ -242,14 +230,13 @@
             width: 100%;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
         }
 
         .buy-btn:hover {
             background-color: var(--dark-red);
         }
 
-        /* Cart Modal Pop-up */
+        /* Slide Cart Modal */
         .cart-modal {
             display: none;
             position: fixed;
@@ -265,46 +252,6 @@
             flex-direction: column;
         }
 
-        .cart-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        .close-cart {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .cart-items-list {
-            flex: 1;
-            overflow-y: auto;
-            margin: 15px 0;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed #eee;
-            padding-bottom: 8px;
-        }
-
-        .checkout-btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Floating WhatsApp Icon */
         .whatsapp-float {
             position: fixed;
             bottom: 25px;
@@ -334,16 +281,14 @@
 </head>
 <body>
 
-    <!-- Header Bar (RED) -->
     <header>
         <a href="#" class="logo-container">
-            <!-- MF Gold Logo Image -->
             <img src="https://img.freepik.com/premium-vector/mf-letter-linked-logo-business-company-identity-initial-letter-mf-logo-vector-template_754537-806.jpg" alt="MF Logo" class="logo-img">
             <span class="logo-text">ModernFeel</span>
         </a>
 
         <div class="search-box">
-            <input type="text" placeholder="Search for toys, dresses, home items...">
+            <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="Search for products...">
             <button><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
 
@@ -357,66 +302,59 @@
         </div>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <a href="#">Toys & Games</a>
-        <a href="#">Fashion & Dresses</a>
-        <a href="#">Household Essentials</a>
-        <a href="#">Electronics</a>
-        <a href="#">Health & Beauty</a>
-        <a href="#">Kitchenware</a>
-        <a href="#">Special Offers</a>
+    <!-- Filter Buttons (Navigation Bar) -->
+    <nav id="categoryNav">
+        <a class="active" onclick="filterCategory('All', this)">All Products</a>
+        <a onclick="filterCategory('Toys & Games', this)">Toys & Games</a>
+        <a onclick="filterCategory('Fashion & Dresses', this)">Fashion & Dresses</a>
+        <a onclick="filterCategory('Household Essentials', this)">Household Essentials</a>
+        <a onclick="filterCategory('Electronics', this)">Electronics</a>
+        <a onclick="filterCategory('Health & Beauty', this)">Health & Beauty</a>
+        <a onclick="filterCategory('Kitchenware', this)">Kitchenware</a>
+        <a onclick="filterCategory('Special Offers', this)">Special Offers</a>
     </nav>
 
     <div class="container">
 
-        <!-- Banner Section -->
         <div class="hero-banner">
             <h2>🛍️ Mega Deals & Best Prices!</h2>
             <p>Your One-Stop Shop for Toys, Trendy Dresses & Household Items</p>
         </div>
 
-        <!-- Latest Deals Header -->
         <div class="section-header">
-            <h3>Latest Deals</h3>
+            <h3 id="currentCategoryTitle">All Products</h3>
         </div>
 
-        <!-- Dynamic CMS Products Grid -->
         <div class="products-grid" id="cms-products">
             <p style="grid-column: 1/-1; text-align: center;">Loading Products...</p>
         </div>
 
     </div>
 
-    <!-- Slide-in Cart Drawer / Modal -->
+    <!-- Cart Pop-up Modal -->
     <div class="cart-modal" id="cartModal">
-        <div class="cart-modal-header">
-            <h3>Your Shopping Cart</h3>
-            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #ddd; padding-bottom:10px;">
+            <h3>Shopping Cart</h3>
+            <span style="font-size:1.5rem; cursor:pointer;" onclick="toggleCart()">&times;</span>
         </div>
-        <div class="cart-items-list" id="cartItemsList">
-            <p style="text-align: center; color: #777;">Your cart is empty.</p>
-        </div>
-        <div style="margin-bottom: 15px; font-weight: bold; font-size: 1.1rem;">
-            Total: Rs. <span id="cartTotal">0</span>
-        </div>
-        <button class="checkout-btn" onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
+        <div id="cartItemsList" style="flex:1; overflow-y:auto; margin:15px 0;"></div>
+        <div style="margin-bottom: 15px; font-weight: bold;">Total: Rs. <span id="cartTotal">0</span></div>
+        <button style="background:#27ae60; color:white; border:none; padding:12px; width:100%; border-radius:5px; cursor:pointer; font-weight:bold;" onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
     </div>
 
-    <!-- WhatsApp Chat Floating Button -->
     <a href="https://wa.me/94744111717" class="whatsapp-float" target="_blank">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
     <footer>
-        <p>© 2026 Modern Feel | All Rights Reserved</p>
+        <p>© Modern Feel | All Rights Reserved</p>
     </footer>
 
-    <!-- Scripts -->
     <script>
+        let allProducts = [];
         let cart = [];
 
-        // Netlify Identity Redirect
+        // Netlify Identity
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on("init", user => {
                 if (!user) {
@@ -427,29 +365,118 @@
             });
         }
 
-        // Add to Cart functionality
+        // Fetch CMS products
+        async function fetchProducts() {
+            const container = document.getElementById('cms-products');
+            try {
+                const response = await fetch('https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products');
+                if (!response.ok) {
+                    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products uploaded yet.</p>';
+                    return;
+                }
+
+                const files = await response.json();
+                allProducts = [];
+
+                for (let file of files) {
+                    if (file.name.endsWith('.md')) {
+                        const res = await fetch(file.download_url);
+                        const text = await res.text();
+
+                        const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
+                        const price = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
+                        const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
+                        
+                        // Extract category accurately
+                        const catMatch = text.match(/category:\s*"?([^"\r\n]+)"?/);
+                        const category = catMatch ? catMatch[1].trim() : 'Uncategorized';
+
+                        allProducts.push({ title, price, image, category });
+                    }
+                }
+                renderProducts(allProducts);
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Failed to load products.</p>';
+            }
+        }
+
+        // Display Products
+        function renderProducts(products) {
+            const container = document.getElementById('cms-products');
+            container.innerHTML = '';
+
+            if (products.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; font-size:1.1rem; padding: 30px;">No products found in this category.</p>';
+                return;
+            }
+
+            products.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <span class="category-badge">${p.category}</span>
+                    <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
+                    <div class="product-title">${p.title}</div>
+                    <div class="price-tag">Rs. ${p.price}</div>
+                    <button class="buy-btn" onclick="addToCart('${p.title}', '${p.price}')">Add to Cart</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Live Category Filtering Method
+        function filterCategory(selectedCategory, element) {
+            document.getElementById('currentCategoryTitle').innerText = selectedCategory === 'All' ? 'All Products' : selectedCategory;
+            
+            // Highlight active button
+            const navLinks = document.querySelectorAll('#categoryNav a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+            }
+
+            if (selectedCategory === 'All') {
+                renderProducts(allProducts);
+            } else {
+                // Case-insensitive exact category matching
+                const filtered = allProducts.filter(p => p.category.toLowerCase() === selectedCategory.toLowerCase());
+                renderProducts(filtered);
+            }
+        }
+
+        // Live Search Filter
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allProducts.filter(p => p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // Cart functions
         function addToCart(title, price) {
             cart.push({ title, price: parseFloat(price) || 0 });
-            updateCartUI();
+            document.getElementById('cart-count').innerText = cart.length;
             alert(title + " has been added to your cart!");
         }
 
-        function updateCartUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            const cartItemsList = document.getElementById('cartItemsList');
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+            
+            const list = document.getElementById('cartItemsList');
             let total = 0;
-
+            list.innerHTML = '';
+            
             if(cart.length === 0) {
-                cartItemsList.innerHTML = '<p style="text-align: center; color: #777;">Your cart is empty.</p>';
+                list.innerHTML = '<p style="text-align:center; color:#777;">Your cart is empty.</p>';
             } else {
-                cartItemsList.innerHTML = '';
                 cart.forEach((item, index) => {
                     total += item.price;
-                    cartItemsList.innerHTML += `
-                        <div class="cart-item">
+                    list.innerHTML += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px dashed #eee; padding-bottom:5px;">
                             <div>
-                                <div><strong>${item.title}</strong></div>
-                                <div>Rs. ${item.price}</div>
+                                <strong>${item.title}</strong><br>
+                                <small>Rs. ${item.price}</small>
                             </div>
                             <i class="fa-solid fa-trash" style="color:red; cursor:pointer;" onclick="removeFromCart(${index})"></i>
                         </div>
@@ -461,71 +488,18 @@
 
         function removeFromCart(index) {
             cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+            document.getElementById('cart-count').innerText = cart.length;
+            toggleCart();
+            toggleCart();
         }
 
         function checkoutWhatsApp() {
-            if(cart.length === 0) {
-                alert("Your cart is empty!");
-                return;
-            }
-            let message = "Hello, I would like to order:\n";
+            if(cart.length === 0) return alert("Your cart is empty!");
+            let msg = "Hello, I would like to place an order:\n\n";
             let total = 0;
-            cart.forEach(item => {
-                message += `- ${item.title}: Rs. ${item.price}\n`;
-                total += item.price;
-            });
-            message += `\nTotal: Rs. ${total}`;
-            
-            const encodedMsg = encodeURIComponent(message);
-            window.open(`https://wa.me/94744111717?text=${encodedMsg}`, '_blank');
-        }
-
-        // Fetch CMS products from GitHub folder automatically
-        async function fetchProducts() {
-            const container = document.getElementById('cms-products');
-            try {
-                const response = await fetch('https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products');
-                
-                if (!response.ok) {
-                    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products uploaded yet.</p>';
-                    return;
-                }
-
-                const files = await response.json();
-                container.innerHTML = '';
-
-                for (let file of files) {
-                    if (file.name.endsWith('.md')) {
-                        const res = await fetch(file.download_url);
-                        const text = await res.text();
-
-                        // Extract parameters
-                        const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
-                        const price = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
-                        const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
-
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                        card.innerHTML = `
-                            <span class="badge">OFFER</span>
-                            <img src="${image || 'https://via.placeholder.com/150'}" alt="${title}">
-                            <div class="product-title">${title}</div>
-                            <div class="price-tag">Rs. ${price}</div>
-                            <button class="buy-btn" onclick="addToCart('${title}', '${price}')">Add to Cart</button>
-                        `;
-                        container.appendChild(card);
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Failed to load products.</p>';
-            }
+            cart.forEach(i => { msg += `• ${i.title} - Rs. ${i.price}\n`; total += i.price; });
+            msg += `\nTotal Amount: Rs. ${total}`;
+            window.open(`https://wa.me/94744111717?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         window.addEventListener('DOMContentLoaded', fetchProducts);
