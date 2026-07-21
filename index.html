@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Feel - Toys Store</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        header {
+            background-color: #ff4757;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .welcome-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .product-card h3 {
+            color: #ff4757;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #2ed573;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2f3542;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
 
+    <header>
+        <h1>Modern Feel</h1>
+        <p>Best Quality Toys for Kids 🧸✨</p>
+    </header>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Welcome to Modern Feel Toys!</h2>
+            <p>We provide high-quality and safe toys for children of all ages.</p>
+            <a href="#contact" class="btn">Contact Us</a>
+        </div>
+
+        <h2 style="text-align: center; margin-bottom: 20px;">Our Featured Toys</h2>
+
+        <div class="products">
+            <div class="product-card">
+                <h3>🧸 Soft Teddy Bear</h3>
+                <p>Ultra-soft, washable, and safe for babies.</p>
+            </div>
+            <div class="product-card">
+                <h3>🏎️ Remote Control Car</h3>
+                <p>High-speed rechargeable RC racing car.</p>
+            </div>
+            <div class="product-card">
+                <h3>🧩 Educational Puzzles</h3>
+                <p>Boost your child's brainpower with fun games.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <p>© 2026 Modern Feel | Contact us: info@modernfeel.com</p>
+    </footer>
+
+</body>
+</html>
