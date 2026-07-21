@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Feel - Toys Store</title>
+    <title>Modern Feel - Store</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,46 +13,56 @@
             color: #333;
         }
         header {
-            background-color: #ff4757;
+            background-color: #2ed573;
             color: white;
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
         }
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
         }
         header p {
             font-size: 1.2rem;
-            margin-top: 5px;
+            margin-top: 8px;
         }
         .container {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
-        .welcome-card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+        .section-title {
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #2f3542;
+            border-bottom: 3px solid #2ed573;
+            display: inline-block;
+            padding-bottom: 5px;
         }
-        .products {
+        .section-wrapper {
+            text-align: center;
+        }
+        .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
         .product-card {
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
         }
         .product-card h3 {
             color: #ff4757;
+            margin-top: 10px;
         }
         .btn {
             display: inline-block;
@@ -62,14 +72,14 @@
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         footer {
             text-align: center;
             padding: 20px;
             background-color: #2f3542;
             color: white;
-            margin-top: 40px;
+            margin-top: 50px;
         }
     </style>
 </head>
@@ -77,22 +87,19 @@
 
     <header>
         <h1>Modern Feel</h1>
-        <p>Best Quality Toys for Kids 🧸✨</p>
+        <p>Your One-Stop Shop for Toys, Dresses & Household Items 🛍️✨</p>
     </header>
 
     <div class="container">
-        <div class="welcome-card">
-            <h2>Welcome to Modern Feel Toys!</h2>
-            <p>We provide high-quality and safe toys for children of all ages.</p>
-            <a href="#contact" class="btn">Contact Us</a>
+
+        <!-- 1. TOYS SECTION -->
+        <div class="section-wrapper">
+            <h2 class="section-title">🧸 Kids Toys</h2>
         </div>
-
-        <h2 style="text-align: center; margin-bottom: 20px;">Our Featured Toys</h2>
-
-        <div class="products">
+        <div class="products-grid">
             <div class="product-card">
                 <h3>🧸 Soft Teddy Bear</h3>
-                <p>Ultra-soft, washable, and safe for babies.</p>
+                <p>Ultra-soft, washable, and safe for kids.</p>
             </div>
             <div class="product-card">
                 <h3>🏎️ Remote Control Car</h3>
@@ -100,13 +107,52 @@
             </div>
             <div class="product-card">
                 <h3>🧩 Educational Puzzles</h3>
-                <p>Boost your child's brainpower with fun games.</p>
+                <p>Fun and brain-boosting games for toddlers.</p>
             </div>
         </div>
+
+        <!-- 2. DRESSES SECTION -->
+        <div class="section-wrapper">
+            <h2 class="section-title">👗 Trendy Dresses</h2>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <h3>👕 Men's & Women's Wear</h3>
+                <p>Comfortable cotton t-shirts and stylish outfits.</p>
+            </div>
+            <div class="product-card">
+                <h3>👗 Kids Fashion</h3>
+                <p>Cute and colorful dresses for boys and girls.</p>
+            </div>
+            <div class="product-card">
+                <h3>🧥 Traditional & Casual</h3>
+                <p>High-quality dresses for every occasion.</p>
+            </div>
+        </div>
+
+        <!-- 3. HOUSEHOLD ITEMS SECTION -->
+        <div class="section-wrapper">
+            <h2 class="section-title">🏠 Household Items</h2>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <h3>🍽️ Kitchenware Essentials</h3>
+                <p>Durable storage boxes, cookware, and tools.</p>
+            </div>
+            <div class="product-card">
+                <h3>🛋️ Home Decor & Living</h3>
+                <p>Bed sheets, curtains, and stylish organizers.</p>
+            </div>
+            <div class="product-card">
+                <h3>🧹 Cleaning Accessories</h3>
+                <p>Smart tools to keep your home spotless.</p>
+            </div>
+        </div>
+
     </div>
 
-    <footer id="contact">
-        <p>© 2026 Modern Feel | Contact us: info@modernfeel.com</p>
+    <footer>
+        <p>© 2026 Modern Feel | Contact us for orders & inquiries</p>
     </footer>
 
 </body>
