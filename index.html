@@ -227,11 +227,21 @@
             -webkit-box-orient: vertical;
         }
 
-        .price-tag {
+        .price-container {
+            margin: 10px 0;
+        }
+
+        .grid-old-price {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 0.85rem;
+            margin-right: 5px;
+        }
+
+        .grid-final-price {
             font-size: 1.1rem;
             font-weight: bold;
             color: var(--primary-red);
-            margin: 10px 0;
         }
 
         .buy-btn {
@@ -249,7 +259,7 @@
             background-color: var(--dark-red);
         }
 
-        /* Full Screen Overlay for Product Details Modal */
+        /* Product Details Popup Modal */
         .details-modal-overlay {
             display: none;
             position: fixed;
@@ -297,25 +307,6 @@
             object-fit: contain;
             border: 1px solid #eee;
             border-radius: 8px;
-        }
-
-        .thumbnails-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .thumb-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .thumb-img:hover {
-            border-color: var(--primary-red);
         }
 
         .details-right {
@@ -368,11 +359,20 @@
         .discount-badge {
             background: #27ae60;
             color: white;
-            font-size: 0.8rem;
-            padding: 3px 8px;
+            font-size: 0.85rem;
+            padding: 4px 8px;
             border-radius: 3px;
             margin-left: 10px;
             font-weight: bold;
+        }
+
+        .product-description-box {
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
 
         .action-row {
@@ -430,7 +430,7 @@
             gap: 8px;
         }
 
-        /* Cart Pop-up Modal */
+        /* Slide Cart Modal */
         .cart-modal {
             display: none;
             position: fixed;
@@ -518,16 +518,13 @@
         </div>
     </div>
 
-    <!-- Product Details Modal (Image like design) -->
+    <!-- Product Details Popup Modal -->
     <div class="details-modal-overlay" id="productDetailsModal">
         <div class="details-modal">
             <span class="close-modal-btn" onclick="closeProductModal()">&times;</span>
             
             <div class="details-left">
                 <img id="modalMainImg" src="" alt="Product Image" class="main-detail-img">
-                <div class="thumbnails-container" id="modalThumbnails">
-                    <!-- Thumbnails will load dynamically -->
-                </div>
             </div>
 
             <div class="details-right">
@@ -537,9 +534,13 @@
                 <div class="stock-status">Availability: <span>In Stock</span></div>
 
                 <div class="detail-price-box">
-                    <span class="old-price" id="modalOldPrice">Rs. 1,950.00</span>
-                    <span class="new-price">Rs. <span id="modalPrice">1,550.00</span></span>
+                    <span class="old-price" id="modalOldPrice">Rs. 1,950</span>
+                    <span class="new-price">Rs. <span id="modalPrice">1,550</span></span>
                     <span class="discount-badge" id="modalDiscount">21% OFF</span>
+                </div>
+
+                <div class="product-description-box" id="modalDescription">
+                    <!-- Product Body Content -->
                 </div>
 
                 <div class="action-row">
@@ -602,14 +603,21 @@
                         const text = await res.text();
 
                         const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
-                        const price = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
-                        const oldPrice = (text.match(/oldPrice:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
+                        const normalPrice = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
+                        const offerPrice = (text.match(/offer_price:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
                         const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
                         const sku = (text.match(/sku:\s*"?([^"\r\n]+)"?/) || [])[1] || Math.floor(10000 + Math.random() * 90000);
                         const catMatch = text.match(/category:\s*"?([^"\r\n]+)"?/);
                         const category = catMatch ? catMatch[1].trim() : 'Uncategorized';
 
-                        allProducts.push({ title, price, oldPrice, image, category, sku });
+                        // Extract Markdown Body Description
+                        const bodyParts = text.split('---');
+                        const description = bodyParts.length > 2 ? bodyParts.slice(2).join('---').trim() : 'No description available.';
+
+                        // Final price calculation for cart and display
+                        const finalPrice = offerPrice ? offerPrice : normalPrice;
+
+                        allProducts.push({ title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description });
                     }
                 }
                 renderProducts(allProducts);
@@ -633,12 +641,20 @@
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.onclick = () => openProductModal(index);
+
+                let priceHTML = '';
+                if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
+                    priceHTML = `<span class="grid-old-price">Rs. ${p.price}</span> <span class="grid-final-price">Rs. ${p.offerPrice}</span>`;
+                } else {
+                    priceHTML = `<span class="grid-final-price">Rs. ${p.price}</span>`;
+                }
+
                 card.innerHTML = `
                     <span class="category-badge">${p.category}</span>
                     <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
                     <div class="product-title">${p.title}</div>
-                    <div class="price-tag">Rs. ${p.price}</div>
-                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${p.title}', '${p.price}')">Add to Cart</button>
+                    <div class="price-container">${priceHTML}</div>
+                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${p.title}', '${p.finalPrice}')">Add to Cart</button>
                 `;
                 container.appendChild(card);
             });
@@ -650,34 +666,31 @@
             document.getElementById('modalTitle').innerText = p.title;
             document.getElementById('modalBreadcrumbTitle').innerText = p.title;
             document.getElementById('modalCategory').innerText = p.category;
-            document.getElementById('modalPrice').innerText = p.price;
             document.getElementById('modalSKU').innerText = p.sku;
             document.getElementById('modalMainImg').src = p.image || 'https://via.placeholder.com/300';
             document.getElementById('modalQty').value = 1;
+            document.getElementById('modalDescription').innerText = p.description;
 
-            if (p.oldPrice) {
-                document.getElementById('modalOldPrice').innerText = 'Rs. ' + p.oldPrice;
+            if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
+                document.getElementById('modalOldPrice').innerText = 'Rs. ' + p.price;
                 document.getElementById('modalOldPrice').style.display = 'inline';
                 
-                // Discount calculate
-                let disc = Math.round(((parseFloat(p.oldPrice) - parseFloat(p.price)) / parseFloat(p.oldPrice)) * 100);
+                document.getElementById('modalPrice').innerText = p.offerPrice;
+
+                // Discount % Calculation
+                let disc = Math.round(((parseFloat(p.price) - parseFloat(p.offerPrice)) / parseFloat(p.price)) * 100);
                 document.getElementById('modalDiscount').innerText = disc + '% OFF';
                 document.getElementById('modalDiscount').style.display = 'inline';
             } else {
+                document.getElementById('modalPrice').innerText = p.price;
                 document.getElementById('modalOldPrice').style.display = 'none';
                 document.getElementById('modalDiscount').style.display = 'none';
             }
 
-            // Create Thumbnails
-            const thumbsContainer = document.getElementById('modalThumbnails');
-            thumbsContainer.innerHTML = `
-                <img src="${p.image}" class="thumb-img" onclick="document.getElementById('modalMainImg').src='${p.image}'">
-            `;
-
             document.getElementById('modalAddToCartBtn').onclick = function() {
                 let qty = parseInt(document.getElementById('modalQty').value) || 1;
                 for(let i=0; i<qty; i++) {
-                    addToCart(p.title, p.price);
+                    addToCart(p.title, p.finalPrice);
                 }
                 closeProductModal();
             };
