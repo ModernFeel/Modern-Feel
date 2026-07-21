@@ -4,20 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO Meta Tags for Google Search -->
+    <!-- SEO Meta Tags -->
     <title>Modern Feel | Online Shopping Sri Lanka</title>
     <meta name="description" content="Buy top quality Toys, Trendy Dresses, Household Essentials, Electronics & Kitchenware at Modern Feel Sri Lanka. Best prices & WhatsApp delivery available. Call 0744111717.">
-    <meta name="keywords" content="Modern Feel, ModernFeel, Online Shopping Sri Lanka, Toys, Dresses, Household Essentials, Kitchenware, Modern Feel Store">
+    <meta name="keywords" content="Modern Feel, ModernFeel, Online Shopping Sri Lanka, Toys, Dresses, Household Essentials, Kitchenware">
     <meta name="robots" content="index, follow">
 
-    <!-- Open Graph Tags for Social Media Sharing (WhatsApp, Facebook, etc.) -->
+    <!-- Open Graph Tags -->
     <meta property="og:title" content="Modern Feel - Online Shopping Sri Lanka">
     <meta property="og:description" content="Shop Toys, Fashion, Household Items & More at Modern Feel. Best Prices Guarantee!">
     <meta property="og:image" content="https://img.freepik.com/premium-vector/mf-letter-linked-logo-business-company-identity-initial-letter-mf-logo-vector-template_754537-806.jpg">
-    <meta property="og:url" content="https://celadon-dusk-4febfd.netlify.app/">
     <meta property="og:type" content="website">
 
-    <!-- Font Awesome Icons & Netlify Identity Widget -->
+    <!-- Font Awesome & Netlify Identity -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
@@ -27,6 +26,7 @@
             --dark-red: #b22222;
             --yellow-accent: #f1c40f;
             --bg-gray: #f4f6f9;
+            --green-btn: #27ae60;
         }
 
         body {
@@ -117,7 +117,6 @@
             cursor: pointer;
         }
 
-        /* Category Navigation Bar */
         nav {
             background-color: var(--dark-red);
             padding: 8px 5%;
@@ -191,6 +190,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            cursor: pointer;
         }
 
         .product-card:hover {
@@ -249,14 +249,193 @@
             background-color: var(--dark-red);
         }
 
-        /* Slide Cart Modal */
+        /* Full Screen Overlay for Product Details Modal */
+        .details-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .details-modal {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 10px;
+            overflow-y: auto;
+            position: relative;
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .details-left {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .main-detail-img {
+            width: 100%;
+            height: 320px;
+            object-fit: contain;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .thumbnails-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .thumb-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .thumb-img:hover {
+            border-color: var(--primary-red);
+        }
+
+        .details-right {
+            flex: 1.2;
+            min-width: 280px;
+        }
+
+        .breadcrumbs {
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .detail-product-title {
+            font-size: 1.5rem;
+            margin: 5px 0 10px 0;
+            color: #222;
+        }
+
+        .detail-sku {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .stock-status {
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .detail-price-box {
+            margin: 15px 0;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .new-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .discount-badge {
+            background: #27ae60;
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        .quantity-selector {
+            display: flex;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .quantity-selector button {
+            background: #eee;
+            border: none;
+            width: 35px;
+            height: 35px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .quantity-selector input {
+            width: 40px;
+            border: none;
+            text-align: center;
+            outline: none;
+        }
+
+        .add-to-cart-large {
+            background: var(--green-btn);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .features-list {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .features-list div {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Cart Pop-up Modal */
         .cart-modal {
             display: none;
             position: fixed;
-            top: 0;
-            right: 0;
-            width: 320px;
-            height: 100%;
+            top: 0; right: 0;
+            width: 320px; height: 100%;
             background: white;
             box-shadow: -4px 0 15px rgba(0,0,0,0.2);
             z-index: 2000;
@@ -267,12 +446,10 @@
 
         .whatsapp-float {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 25px; right: 25px;
             background-color: #25d366;
             color: white;
-            width: 55px;
-            height: 55px;
+            width: 55px; height: 55px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -315,7 +492,6 @@
         </div>
     </header>
 
-    <!-- Filter Buttons (Navigation Bar) -->
     <nav id="categoryNav">
         <a class="active" onclick="filterCategory('All', this)">All Products</a>
         <a onclick="filterCategory('Toys & Games', this)">Toys & Games</a>
@@ -328,7 +504,6 @@
     </nav>
 
     <div class="container">
-
         <div class="hero-banner">
             <h2>🛍️ Mega Deals & Best Prices!</h2>
             <p>Your One-Stop Shop for Toys, Trendy Dresses & Household Items</p>
@@ -341,10 +516,51 @@
         <div class="products-grid" id="cms-products">
             <p style="grid-column: 1/-1; text-align: center;">Loading Products...</p>
         </div>
-
     </div>
 
-    <!-- Cart Pop-up Modal -->
+    <!-- Product Details Modal (Image like design) -->
+    <div class="details-modal-overlay" id="productDetailsModal">
+        <div class="details-modal">
+            <span class="close-modal-btn" onclick="closeProductModal()">&times;</span>
+            
+            <div class="details-left">
+                <img id="modalMainImg" src="" alt="Product Image" class="main-detail-img">
+                <div class="thumbnails-container" id="modalThumbnails">
+                    <!-- Thumbnails will load dynamically -->
+                </div>
+            </div>
+
+            <div class="details-right">
+                <div class="breadcrumbs">Home / <span id="modalCategory">Kitchenware</span> / <span id="modalBreadcrumbTitle">Product</span></div>
+                <h2 class="detail-product-title" id="modalTitle">Product Title</h2>
+                <div class="detail-sku">SKU: <span id="modalSKU">29184</span></div>
+                <div class="stock-status">Availability: <span>In Stock</span></div>
+
+                <div class="detail-price-box">
+                    <span class="old-price" id="modalOldPrice">Rs. 1,950.00</span>
+                    <span class="new-price">Rs. <span id="modalPrice">1,550.00</span></span>
+                    <span class="discount-badge" id="modalDiscount">21% OFF</span>
+                </div>
+
+                <div class="action-row">
+                    <div class="quantity-selector">
+                        <button onclick="updateQty(-1)">-</button>
+                        <input type="text" id="modalQty" value="1" readonly>
+                        <button onclick="updateQty(1)">+</button>
+                    </div>
+                    <button class="add-to-cart-large" id="modalAddToCartBtn">ADD TO CART</button>
+                </div>
+
+                <div class="features-list">
+                    <div><i class="fa-solid fa-truck" style="color:#27ae60;"></i> <b>TRUSTED SHIPPING:</b> Islandwide Delivery</div>
+                    <div><i class="fa-solid fa-rotate-left" style="color:#27ae60;"></i> <b>EASY RETURNS:</b> Free returns on eligible items</div>
+                    <div><i class="fa-solid fa-shield-halved" style="color:#27ae60;"></i> <b>SECURE SHOPPING:</b> Your data is protected</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Cart Modal -->
     <div class="cart-modal" id="cartModal">
         <div style="display:flex; justify-content:space-between; border-bottom:1px solid #ddd; padding-bottom:10px;">
             <h3>Shopping Cart</h3>
@@ -367,17 +583,6 @@
         let allProducts = [];
         let cart = [];
 
-        // Netlify Identity
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
-                }
-            });
-        }
-
         // Fetch CMS products
         async function fetchProducts() {
             const container = document.getElementById('cms-products');
@@ -398,13 +603,13 @@
 
                         const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
                         const price = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
+                        const oldPrice = (text.match(/oldPrice:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
                         const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
-                        
-                        // Extract category accurately
+                        const sku = (text.match(/sku:\s*"?([^"\r\n]+)"?/) || [])[1] || Math.floor(10000 + Math.random() * 90000);
                         const catMatch = text.match(/category:\s*"?([^"\r\n]+)"?/);
                         const category = catMatch ? catMatch[1].trim() : 'Uncategorized';
 
-                        allProducts.push({ title, price, image, category });
+                        allProducts.push({ title, price, oldPrice, image, category, sku });
                     }
                 }
                 renderProducts(allProducts);
@@ -414,7 +619,7 @@
             }
         }
 
-        // Display Products
+        // Display Products Grid
         function renderProducts(products) {
             const container = document.getElementById('cms-products');
             container.innerHTML = '';
@@ -424,48 +629,97 @@
                 return;
             }
 
-            products.forEach(p => {
+            products.forEach((p, index) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
+                card.onclick = () => openProductModal(index);
                 card.innerHTML = `
                     <span class="category-badge">${p.category}</span>
                     <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
                     <div class="product-title">${p.title}</div>
                     <div class="price-tag">Rs. ${p.price}</div>
-                    <button class="buy-btn" onclick="addToCart('${p.title}', '${p.price}')">Add to Cart</button>
+                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${p.title}', '${p.price}')">Add to Cart</button>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // Live Category Filtering Method
+        // Open Product Details Modal
+        function openProductModal(index) {
+            const p = allProducts[index];
+            document.getElementById('modalTitle').innerText = p.title;
+            document.getElementById('modalBreadcrumbTitle').innerText = p.title;
+            document.getElementById('modalCategory').innerText = p.category;
+            document.getElementById('modalPrice').innerText = p.price;
+            document.getElementById('modalSKU').innerText = p.sku;
+            document.getElementById('modalMainImg').src = p.image || 'https://via.placeholder.com/300';
+            document.getElementById('modalQty').value = 1;
+
+            if (p.oldPrice) {
+                document.getElementById('modalOldPrice').innerText = 'Rs. ' + p.oldPrice;
+                document.getElementById('modalOldPrice').style.display = 'inline';
+                
+                // Discount calculate
+                let disc = Math.round(((parseFloat(p.oldPrice) - parseFloat(p.price)) / parseFloat(p.oldPrice)) * 100);
+                document.getElementById('modalDiscount').innerText = disc + '% OFF';
+                document.getElementById('modalDiscount').style.display = 'inline';
+            } else {
+                document.getElementById('modalOldPrice').style.display = 'none';
+                document.getElementById('modalDiscount').style.display = 'none';
+            }
+
+            // Create Thumbnails
+            const thumbsContainer = document.getElementById('modalThumbnails');
+            thumbsContainer.innerHTML = `
+                <img src="${p.image}" class="thumb-img" onclick="document.getElementById('modalMainImg').src='${p.image}'">
+            `;
+
+            document.getElementById('modalAddToCartBtn').onclick = function() {
+                let qty = parseInt(document.getElementById('modalQty').value) || 1;
+                for(let i=0; i<qty; i++) {
+                    addToCart(p.title, p.price);
+                }
+                closeProductModal();
+            };
+
+            document.getElementById('productDetailsModal').style.display = 'flex';
+        }
+
+        function closeProductModal() {
+            document.getElementById('productDetailsModal').style.display = 'none';
+        }
+
+        function updateQty(change) {
+            let input = document.getElementById('modalQty');
+            let current = parseInt(input.value) || 1;
+            if (current + change >= 1) {
+                input.value = current + change;
+            }
+        }
+
+        // Category Filter
         function filterCategory(selectedCategory, element) {
             document.getElementById('currentCategoryTitle').innerText = selectedCategory === 'All' ? 'All Products' : selectedCategory;
-            
-            // Highlight active button
             const navLinks = document.querySelectorAll('#categoryNav a');
             navLinks.forEach(link => link.classList.remove('active'));
-            if (element) {
-                element.classList.add('active');
-            }
+            if (element) element.classList.add('active');
 
             if (selectedCategory === 'All') {
                 renderProducts(allProducts);
             } else {
-                // Case-insensitive exact category matching
                 const filtered = allProducts.filter(p => p.category.toLowerCase() === selectedCategory.toLowerCase());
                 renderProducts(filtered);
             }
         }
 
-        // Live Search Filter
+        // Search Filter
         function searchProducts() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filtered = allProducts.filter(p => p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
             renderProducts(filtered);
         }
 
-        // Cart functions
+        // Cart Logic
         function addToCart(title, price) {
             cart.push({ title, price: parseFloat(price) || 0 });
             document.getElementById('cart-count').innerText = cart.length;
@@ -502,8 +756,7 @@
         function removeFromCart(index) {
             cart.splice(index, 1);
             document.getElementById('cart-count').innerText = cart.length;
-            toggleCart();
-            toggleCart();
+            toggleCart(); toggleCart();
         }
 
         function checkoutWhatsApp() {
