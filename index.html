@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Feel - Store</title>
+    
+    <!-- Netlify Identity Widget Script (தலைப்புப் பகுதியில்) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -154,6 +158,19 @@
     <footer>
         <p>© 2026 Modern Feel | Contact us for orders & inquiries</p>
     </footer>
+
+    <!-- Identity Widget Redirect Script (இறுதிப் பகுதியில்) -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
 
 </body>
 </html>
