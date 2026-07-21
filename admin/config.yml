@@ -33,3 +33,24 @@ collections:
           - "Special Offers"
 
       - { label: "Description", name: "body", widget: "markdown", required: false }
+  # -----------------------------------------------------------
+  # Banner & Video Management Collection
+  # -----------------------------------------------------------
+  - name: "banners"
+    label: "Banner & Videos"
+    folder: "content/banners"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Banner Title", name: "title", widget: "string" }
+      - { label: "Subtitle / Tagline", name: "subtitle", widget: "string", required: false }
+      - label: "Banner Type"
+        name: "type"
+        widget: "select"
+        options:
+          - "video_file"
+          - "youtube"
+          - "image"
+      - { label: "Video File Upload (.mp4)", name: "video_file", widget: "file", required: false }
+      - { label: "YouTube Embed URL or ID", name: "youtube_id", widget: "string", required: false }
+      - { label: "Banner Image", name: "image", widget: "image", required: false }
