@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: main # உங்கள் GitHub branch பெயர் (main)
+  branch: main # உங்கள் GitHub branch பெயர்
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -13,8 +13,9 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Price", name: "price", widget: "number" }
-      - { label: "Offer Price", name: "offer_price", widget: "number", required: false }
+      - { label: "SKU / Item Code", name: "sku", widget: "string", required: false }
+      - { label: "Normal Price (Original Price)", name: "price", widget: "number", value_type: "int" }
+      - { label: "Offer Price (Discounted Price)", name: "offer_price", widget: "number", value_type: "int", required: false }
       - { label: "Product Image", name: "image", widget: "image" }
       
       # Category தேர்வு செய்வதற்கான Select Widget
