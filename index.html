@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Feel - Store</title>
     
-    <!-- Netlify Identity Widget Script (தலைப்புப் பகுதியில்) -->
+    <!-- Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
     <style>
@@ -64,19 +64,22 @@
         .product-card:hover {
             transform: translateY(-5px);
         }
+        .product-card img {
+            max-width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
         .product-card h3 {
             color: #ff4757;
-            margin-top: 10px;
+            margin: 10px 0 5px 0;
         }
-        .btn {
-            display: inline-block;
-            background-color: #2ed573;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
+        .price {
+            font-size: 1.2rem;
             font-weight: bold;
-            margin-top: 15px;
+            color: #2ed573;
+            margin: 5px 0;
         }
         footer {
             text-align: center;
@@ -96,61 +99,12 @@
 
     <div class="container">
 
-        <!-- 1. TOYS SECTION -->
+        <!-- Dynamic CMS Products Section -->
         <div class="section-wrapper">
-            <h2 class="section-title">🧸 Kids Toys</h2>
+            <h2 class="section-title">✨ Latest Products & Offers</h2>
         </div>
-        <div class="products-grid">
-            <div class="product-card">
-                <h3>🧸 Soft Teddy Bear</h3>
-                <p>Ultra-soft, washable, and safe for kids.</p>
-            </div>
-            <div class="product-card">
-                <h3>🏎️ Remote Control Car</h3>
-                <p>High-speed rechargeable RC racing car.</p>
-            </div>
-            <div class="product-card">
-                <h3>🧩 Educational Puzzles</h3>
-                <p>Fun and brain-boosting games for toddlers.</p>
-            </div>
-        </div>
-
-        <!-- 2. DRESSES SECTION -->
-        <div class="section-wrapper">
-            <h2 class="section-title">👗 Trendy Dresses</h2>
-        </div>
-        <div class="products-grid">
-            <div class="product-card">
-                <h3>👕 Men's & Women's Wear</h3>
-                <p>Comfortable cotton t-shirts and stylish outfits.</p>
-            </div>
-            <div class="product-card">
-                <h3>👗 Kids Fashion</h3>
-                <p>Cute and colorful dresses for boys and girls.</p>
-            </div>
-            <div class="product-card">
-                <h3>🧥 Traditional & Casual</h3>
-                <p>High-quality dresses for every occasion.</p>
-            </div>
-        </div>
-
-        <!-- 3. HOUSEHOLD ITEMS SECTION -->
-        <div class="section-wrapper">
-            <h2 class="section-title">🏠 Household Items</h2>
-        </div>
-        <div class="products-grid">
-            <div class="product-card">
-                <h3>🍽️ Kitchenware Essentials</h3>
-                <p>Durable storage boxes, cookware, and tools.</p>
-            </div>
-            <div class="product-card">
-                <h3>🛋️ Home Decor & Living</h3>
-                <p>Bed sheets, curtains, and stylish organizers.</p>
-            </div>
-            <div class="product-card">
-                <h3>🧹 Cleaning Accessories</h3>
-                <p>Smart tools to keep your home spotless.</p>
-            </div>
+        <div class="products-grid" id="dynamic-products">
+            <p style="text-align:center; grid-column: 1/-1;">Loading products...</p>
         </div>
 
     </div>
@@ -159,7 +113,7 @@
         <p>© 2026 Modern Feel | Contact us for orders & inquiries</p>
     </footer>
 
-    <!-- Identity Widget Redirect Script (இறுதிப் பகுதியில்) -->
+    <!-- Identity Widget Redirect Script -->
     <script>
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", user => {
@@ -170,6 +124,53 @@
           }
         });
       }
+
+      // Fetch CMS Products automatically
+      async function loadCMSProducts() {
+        const container = document.getElementById('dynamic-products');
+        try {
+          // GitHub Repository-ல் உள்ள CMS Products எடுக்கப்படுகிறது
+          const response = await fetch('https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products');
+          
+          if (!response.ok) {
+            container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No CMS products found yet.</p>';
+            return;
+          }
+
+          const files = await response.json();
+          container.innerHTML = '';
+
+          for (let file of files) {
+            if (file.name.endsWith('.md')) {
+              const res = await fetch(file.download_url);
+              const text = await res.text();
+
+              // Extract values from Markdown Frontmatter
+              const titleMatch = text.match(/title:\s*"?([^"\r\n]+)"?/);
+              const priceMatch = text.match(/price:\s*"?([^"\r\n]+)"?/);
+              const imageMatch = text.match(/image:\s*"?([^"\r\n]+)"?/);
+
+              const title = titleMatch ? titleMatch[1] : 'Product';
+              const price = priceMatch ? priceMatch[1] : '';
+              const image = imageMatch ? imageMatch[1] : '';
+
+              const card = document.createElement('div');
+              card.className = 'product-card';
+              card.innerHTML = `
+                ${image ? `<img src="${image}" alt="${title}">` : ''}
+                <h3>${title}</h3>
+                ${price ? `<div class="price">Rs. ${price}</div>` : ''}
+              `;
+              container.appendChild(card);
+            }
+          }
+        } catch (error) {
+          console.error("Error loading products:", error);
+          container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Failed to load products.</p>';
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', loadCMSProducts);
     </script>
 
 </body>
