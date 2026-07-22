@@ -656,7 +656,7 @@
             </div>
 
             <div class="details-right">
-                <div class="breadcrumbs">Home / <span id="modalCategory">Category</span> / <span id="modalBreadcrumbTitle">Product</span></div>
+                <div class="breadcrumbs">Home / <span id="modalCategory">Kitchenware</span> / <span id="modalBreadcrumbTitle">Product</span></div>
                 <h2 class="detail-product-title" id="modalTitle">Product Title</h2>
                 <div class="detail-sku">SKU: <span id="modalSKU">29184</span></div>
                 <div class="stock-status">Availability: <span>In Stock</span></div>
@@ -751,19 +751,17 @@
             showSlide(slideIndex);
         }
 
-        // Auto change banner every 6 seconds
+        // Auto change banner every 6 seconds (Fixed)
         setInterval(() => {
             changeSlide(1);
         }, 6000);
 
 
-        // Optimized Async Fetch using GitHub Raw URLs & Promise.all (Prevents API Limit)
+        // Fetch CMS products safely
         async function fetchProducts() {
             const container = document.getElementById('cms-products');
             try {
-                const repoUrl = 'https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products';
-                const response = await fetch(repoUrl);
-
+                const response = await fetch('https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products');
                 if (!response.ok) {
                     container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products uploaded yet.</p>';
                     return;
@@ -772,13 +770,10 @@
                 const files = await response.json();
                 allProducts = [];
 
-                // Load all Markdown files in parallel via GitHub Raw URLs
-                const productPromises = files
-                    .filter(file => file.name.endsWith('.md'))
-                    .map(async file => {
+                for (let file of files) {
+                    if (file.name.endsWith('.md')) {
                         try {
-                            const rawUrl = `https://raw.githubusercontent.com/ModernFeel/Modern-Feel/main/content/products/${file.name}`;
-                            const res = await fetch(rawUrl);
+                            const res = await fetch(file.download_url);
                             const text = await res.text();
 
                             const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
@@ -791,18 +786,14 @@
 
                             const bodyParts = text.split('---');
                             const description = bodyParts.length > 2 ? bodyParts.slice(2).join('---').trim() : 'No description available.';
-                            const finalPrice = (offerPrice && parseFloat(offerPrice) > 0) ? offerPrice : normalPrice;
+                            const finalPrice = offerPrice ? offerPrice : normalPrice;
 
-                            return { title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description };
+                            allProducts.push({ title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description });
                         } catch (e) {
-                            console.error("Error reading file:", file.name, e);
-                            return null;
+                            console.error("Error parsing product file:", file.name, e);
                         }
-                    });
-
-                const results = await Promise.all(productPromises);
-                allProducts = results.filter(p => p !== null);
-
+                    }
+                }
                 renderProducts(allProducts);
             } catch (err) {
                 console.error(err);
@@ -810,7 +801,7 @@
             }
         }
 
-        // Render Products Grid (FIXED: Direct object passing to Modal)
+        // Render Products
         function renderProducts(products) {
             const container = document.getElementById('cms-products');
             container.innerHTML = '';
@@ -820,12 +811,10 @@
                 return;
             }
 
-            products.forEach((p) => {
+            products.forEach((p, index) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                
-                // பொருளை நேரடியாக Modal ஃபங்ஷனுக்கு அனுப்புகிறோம்
-                card.onclick = () => openProductModal(p);
+                card.onclick = () => openProductModal(index);
 
                 let priceHTML = '';
                 if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
@@ -845,8 +834,9 @@
             });
         }
 
-        // Open Product Details Modal (FIXED: Uses exact product object)
-        function openProductModal(p) {
+        // Open Product Details Modal
+        function openProductModal(index) {
+            const p = allProducts[index];
             document.getElementById('modalTitle').innerText = p.title;
             document.getElementById('modalBreadcrumbTitle').innerText = p.title;
             document.getElementById('modalCategory').innerText = p.category;
@@ -872,7 +862,7 @@
 
             document.getElementById('modalAddToCartBtn').onclick = function() {
                 let qty = parseInt(document.getElementById('modalQty').value) || 1;
-                for(let i = 0; i < qty; i++) {
+                for(let i=0; i<qty; i++) {
                     addToCart(p.title, p.finalPrice);
                 }
                 closeProductModal();
