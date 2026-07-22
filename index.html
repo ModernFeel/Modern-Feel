@@ -803,39 +803,39 @@
 
         // Render Products
         function renderProducts(products) {
-            const container = document.getElementById('cms-products');
-            container.innerHTML = '';
+    const container = document.getElementById('cms-products');
+    container.innerHTML = '';
 
-            if (products.length === 0) {
-                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; font-size:1.1rem; padding: 30px;">No products found in this category.</p>';
-                return;
-            }
+    if (products.length === 0) {
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; font-size:1.1rem; padding: 30px;">No products found in this category.</p>';
+        return;
+    }
 
-            products.forEach((p) => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                
-                // Title-ஐ வைத்து பாதுகாப்பாக கிளிக் நிகழ்வை அமைத்தல்
-                const safeTitle = p.title.replace(/'/g, "\\'");
-                card.setAttribute('onclick', `openProductModalByTitle('${safeTitle}')`);
+    products.forEach((p) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        
+        // பெயரில் உள்ள சிறப்புக் குறிகளால் பிழை வராமல் இருக்க encodeURIComponent பயன்படுத்துகிறோம்
+        const encodedTitle = encodeURIComponent(p.title);
+        card.setAttribute('onclick', `openProductModalByTitle('${encodedTitle}')`);
 
-                let priceHTML = '';
-                if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
-                    priceHTML = `<span class="grid-old-price">Rs. ${p.price}</span> <span class="grid-final-price">Rs. ${p.offerPrice}</span>`;
-                } else {
-                    priceHTML = `<span class="grid-final-price">Rs. ${p.price}</span>`;
-                }
-
-                card.innerHTML = `
-                    <span class="category-badge">${p.category}</span>
-                    <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
-                    <div class="product-title">${p.title}</div>
-                    <div class="price-container">${priceHTML}</div>
-                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${safeTitle}', '${p.finalPrice}')">Add to Cart</button>
-                `;
-                container.appendChild(card);
-            });
+        let priceHTML = '';
+        if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
+            priceHTML = `<span class="grid-old-price">Rs. ${p.price}</span> <span class="grid-final-price">Rs. ${p.offerPrice}</span>`;
+        } else {
+            priceHTML = `<span class="grid-final-price">Rs. ${p.price}</span>`;
         }
+
+        card.innerHTML = `
+            <span class="category-badge">${p.category}</span>
+            <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
+            <div class="product-title">${p.title}</div>
+            <div class="price-container">${priceHTML}</div>
+            <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${encodedTitle}', '${p.finalPrice}')">Add to Cart</button>
+        `;
+        container.appendChild(card);
+    });
+}
 
         // Open Product Details Modal
         function openProductModalByTitle(title) {
