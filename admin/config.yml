@@ -1,56 +1,191 @@
 backend:
-  name: git-gateway
-  branch: main # உங்கள் GitHub branch பெயர்
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+  name: git-gateway
+
+  branch: main
+
+
+
+media_folder:
+
+  images/uploads
+
+
+
+public_folder:
+
+  /images/uploads
+
+
+
+
+
 
 collections:
-  - name: "products"
-    label: "Products & Offers"
-    folder: "content/products"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "SKU / Item Code", name: "sku", widget: "string", required: false }
-      - { label: "Normal Price (Original Price)", name: "price", widget: "number", value_type: "int" }
-      - { label: "Offer Price (Discounted Price)", name: "offer_price", widget: "number", value_type: "int", required: false }
-      - { label: "Product Image", name: "image", widget: "image" }
-      
-      # Category தேர்வு செய்வதற்கான Select Widget
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        default: "Toys & Games"
-        options:
-          - "Toys & Games"
-          - "Fashion & Dresses"
-          - "Household Essentials"
-          - "Electronics"
-          - "Health & Beauty"
-          - "Kitchenware"
-          - "Special Offers"
 
-      - { label: "Description", name: "body", widget: "markdown", required: false }
-  # -----------------------------------------------------------
-  # Banner & Video Management Collection
-  # -----------------------------------------------------------
-  - name: "banners"
-    label: "Banner & Videos"
-    folder: "content/banners"
+
+# ==========================
+# PRODUCTS
+# ==========================
+
+
+  - name: "products"
+
+    label: "Products"
+
+    folder: "content/products/items"
+
     create: true
+
     slug: "{{slug}}"
+
     fields:
-      - { label: "Banner Title", name: "title", widget: "string" }
-      - { label: "Subtitle / Tagline", name: "subtitle", widget: "string", required: false }
-      - label: "Banner Type"
-        name: "type"
+
+
+      - label: "Product Name"
+
+        name: "name"
+
+        widget: "string"
+
+
+
+      - label: "Category"
+
+        name: "category"
+
         widget: "select"
+
         options:
-          - "video_file"
-          - "youtube"
-          - "image"
-      - { label: "Video File Upload (.mp4)", name: "video_file", widget: "file", required: false }
-      - { label: "YouTube Embed URL or ID", name: "youtube_id", widget: "string", required: false }
-      - { label: "Banner Image", name: "image", widget: "image", required: false }
+
+          - Toys & Games
+
+          - Fashion & Dresses
+
+          - Household Essentials
+
+          - Electronics
+
+          - Health & Beauty
+
+          - Kitchenware
+
+          - Special Offers
+
+
+
+      - label: "Price"
+
+        name: "price"
+
+        widget: "number"
+
+
+
+      - label: "Old Price"
+
+        name: "oldPrice"
+
+        widget: "number"
+
+        required: false
+
+
+
+      - label: "Discount"
+
+        name: "discount"
+
+        widget: "number"
+
+        required: false
+
+
+
+      - label: "Product Image"
+
+        name: "image"
+
+        widget: "image"
+
+
+
+      - label: "Description"
+
+        name: "description"
+
+        widget: "text"
+
+
+
+      - label: "Stock Available"
+
+        name: "stock"
+
+        widget: "boolean"
+
+        default: true
+
+
+
+
+
+
+# ==========================
+# BANNERS
+# ==========================
+
+
+  - name: "banners"
+
+    label: "Banners"
+
+    folder: "content/banners/items"
+
+    create: true
+
+    slug: "{{slug}}"
+
+
+    fields:
+
+
+      - label: "Banner Title"
+
+        name: "title"
+
+        widget: "string"
+
+
+
+      - label: "Description"
+
+        name: "description"
+
+        widget: "text"
+
+
+
+      - label: "Banner Image"
+
+        name: "image"
+
+        widget: "image"
+
+
+
+      - label: "Button Text"
+
+        name: "buttonText"
+
+        widget: "string"
+
+
+
+      - label: "Link"
+
+        name: "link"
+
+        widget: "string"
+
+        required: false
