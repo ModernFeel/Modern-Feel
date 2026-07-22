@@ -656,7 +656,7 @@
             </div>
 
             <div class="details-right">
-                <div class="breadcrumbs">Home / <span id="modalCategory">Kitchenware</span> / <span id="modalBreadcrumbTitle">Product</span></div>
+                <div class="breadcrumbs">Home / <span id="modalCategory">Category</span> / <span id="modalBreadcrumbTitle">Product</span></div>
                 <h2 class="detail-product-title" id="modalTitle">Product Title</h2>
                 <div class="detail-sku">SKU: <span id="modalSKU">29184</span></div>
                 <div class="stock-status">Availability: <span>In Stock</span></div>
@@ -810,7 +810,7 @@
             }
         }
 
-        // Render Products Grid
+        // Render Products Grid (FIXED: Direct object passing to Modal)
         function renderProducts(products) {
             const container = document.getElementById('cms-products');
             container.innerHTML = '';
@@ -820,10 +820,12 @@
                 return;
             }
 
-            products.forEach((p, index) => {
+            products.forEach((p) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                card.onclick = () => openProductModal(index);
+                
+                // பொருளை நேரடியாக Modal ஃபங்ஷனுக்கு அனுப்புகிறோம்
+                card.onclick = () => openProductModal(p);
 
                 let priceHTML = '';
                 if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
@@ -843,9 +845,8 @@
             });
         }
 
-        // Open Product Details Modal
-        function openProductModal(index) {
-            const p = allProducts[index];
+        // Open Product Details Modal (FIXED: Uses exact product object)
+        function openProductModal(p) {
             document.getElementById('modalTitle').innerText = p.title;
             document.getElementById('modalBreadcrumbTitle').innerText = p.title;
             document.getElementById('modalCategory').innerText = p.category;
@@ -871,7 +872,7 @@
 
             document.getElementById('modalAddToCartBtn').onclick = function() {
                 let qty = parseInt(document.getElementById('modalQty').value) || 1;
-                for(let i=0; i<qty; i++) {
+                for(let i = 0; i < qty; i++) {
                     addToCart(p.title, p.finalPrice);
                 }
                 closeProductModal();
