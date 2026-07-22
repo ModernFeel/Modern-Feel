@@ -1,0 +1,105 @@
+[
+    {
+        "id": 1,
+        "name": "Kids Educational Building Blocks",
+        "category": "Toys & Games",
+        "price": 2500,
+        "oldPrice": 3000,
+        "discount": 17,
+        "image": "images/products/toy-1.jpg",
+        "description": "Creative educational building blocks for children's learning and entertainment.",
+        "stock": true
+    },
+
+
+    {
+        "id": 2,
+        "name": "Beautiful Girls Fashion Dress",
+        "category": "Fashion & Dresses",
+        "price": 4500,
+        "oldPrice": 5500,
+        "discount": 18,
+        "image": "images/products/dress-1.jpg",
+        "description": "Modern stylish dress collection with premium quality fabric.",
+        "stock": true
+    },
+
+
+    {
+        "id": 3,
+        "name": "Smart LED Bluetooth Speaker",
+        "category": "Electronics",
+        "price": 6500,
+        "oldPrice": 8000,
+        "discount": 19,
+        "image": "images/products/speaker-1.jpg",
+        "description": "Portable Bluetooth speaker with powerful sound and long battery life.",
+        "stock": true
+    },
+
+
+    {
+        "id": 4,
+        "name": "Kitchen Storage Container Set",
+        "category": "Kitchenware",
+        "price": 3200,
+        "oldPrice": 4000,
+        "discount": 20,
+        "image": "images/products/kitchen-1.jpg",
+        "description": "Durable food storage containers for modern kitchens.",
+        "stock": true
+    },
+
+
+    {
+        "id": 5,
+        "name": "Premium Beauty Care Kit",
+        "category": "Health & Beauty",
+        "price": 3800,
+        "oldPrice": 5000,
+        "discount": 24,
+        "image": "images/products/beauty-1.jpg",
+        "description": "Complete personal care kit for daily beauty needs.",
+        "stock": true
+    },
+
+
+    {
+        "id": 6,
+        "name": "Home Cleaning Essentials Pack",
+        "category": "Household Essentials",
+        "price": 2900,
+        "oldPrice": 3500,
+        "discount": 17,
+        "image": "images/products/home-1.jpg",
+        "description": "Useful household cleaning products pack.",
+        "stock": true
+    },
+
+
+    {
+        "id": 7,
+        "name": "Wireless Smart Watch",
+        "category": "Electronics",
+        "price": 7200,
+        "oldPrice": 9000,
+        "discount": 20,
+        "image": "images/products/watch-1.jpg",
+        "description": "Smart watch with fitness tracking and notification features.",
+        "stock": true
+    },
+
+
+    {
+        "id": 8,
+        "name": "Ladies Handbag Collection",
+        "category": "Fashion & Dresses",
+        "price": 5200,
+        "oldPrice": 6500,
+        "discount": 20,
+        "image": "images/products/bag-1.jpg",
+        "description": "Elegant handbag suitable for daily and special occasions.",
+        "stock": true
+    }
+
+]
