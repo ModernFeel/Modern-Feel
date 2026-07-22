@@ -706,6 +706,19 @@
         <p>© Modern Feel | All Rights Reserved</p>
     </footer>
 
+    <!-- Netlify Identity Redirect Script -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+
     <script>
         let allProducts = [];
         let cart = [];
@@ -716,6 +729,8 @@
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.dot');
             
+            if (slides.length === 0) return;
+
             if (index >= slides.length) slideIndex = 0;
             if (index < 0) slideIndex = slides.length - 1;
 
@@ -736,14 +751,13 @@
             showSlide(slideIndex);
         }
 
-        // Auto change banner every 6 seconds
+        // Auto change banner every 6 seconds (Fixed)
         setInterval(() => {
-            slideIndex++;
-            showSlide(slideIndex);
+            changeSlide(1);
         }, 6000);
 
 
-        // Fetch CMS products
+        // Fetch CMS products safely
         async function fetchProducts() {
             const container = document.getElementById('cms-products');
             try {
@@ -758,22 +772,26 @@
 
                 for (let file of files) {
                     if (file.name.endsWith('.md')) {
-                        const res = await fetch(file.download_url);
-                        const text = await res.text();
+                        try {
+                            const res = await fetch(file.download_url);
+                            const text = await res.text();
 
-                        const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
-                        const normalPrice = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
-                        const offerPrice = (text.match(/offer_price:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
-                        const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
-                        const sku = (text.match(/sku:\s*"?([^"\r\n]+)"?/) || [])[1] || Math.floor(10000 + Math.random() * 90000);
-                        const catMatch = text.match(/category:\s*"?([^"\r\n]+)"?/);
-                        const category = catMatch ? catMatch[1].trim() : 'Uncategorized';
+                            const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
+                            const normalPrice = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
+                            const offerPrice = (text.match(/offer_price:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
+                            const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
+                            const sku = (text.match(/sku:\s*"?([^"\r\n]+)"?/) || [])[1] || Math.floor(10000 + Math.random() * 90000);
+                            const catMatch = text.match(/category:\s*"?([^"\r\n]+)"?/);
+                            const category = catMatch ? catMatch[1].trim() : 'Uncategorized';
 
-                        const bodyParts = text.split('---');
-                        const description = bodyParts.length > 2 ? bodyParts.slice(2).join('---').trim() : 'No description available.';
-                        const finalPrice = offerPrice ? offerPrice : normalPrice;
+                            const bodyParts = text.split('---');
+                            const description = bodyParts.length > 2 ? bodyParts.slice(2).join('---').trim() : 'No description available.';
+                            const finalPrice = offerPrice ? offerPrice : normalPrice;
 
-                        allProducts.push({ title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description });
+                            allProducts.push({ title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description });
+                        } catch (e) {
+                            console.error("Error parsing product file:", file.name, e);
+                        }
                     }
                 }
                 renderProducts(allProducts);
@@ -810,7 +828,7 @@
                     <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
                     <div class="product-title">${p.title}</div>
                     <div class="price-container">${priceHTML}</div>
-                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${p.title}', '${p.finalPrice}')">Add to Cart</button>
+                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${p.title.replace(/'/g, "\\'")}', '${p.finalPrice}')">Add to Cart</button>
                 `;
                 container.appendChild(card);
             });
@@ -898,6 +916,10 @@
             const modal = document.getElementById('cartModal');
             modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
             
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
             const list = document.getElementById('cartItemsList');
             let total = 0;
             list.innerHTML = '';
@@ -924,7 +946,7 @@
         function removeFromCart(index) {
             cart.splice(index, 1);
             document.getElementById('cart-count').innerText = cart.length;
-            toggleCart(); toggleCart();
+            updateCartDisplay();
         }
 
         function checkoutWhatsApp() {
