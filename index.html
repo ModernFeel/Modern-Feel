@@ -780,7 +780,7 @@
                             const normalPrice = (text.match(/price:\s*"?([^"\r\n]+)"?/) || [])[1] || '0';
                             const offerPrice = (text.match(/offer_price:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
                             const image = (text.match(/image:\s*"?([^"\r\n]+)"?/) || [])[1] || '';
-                            const sku = (text.match(/sku:\s*"?([^"\r\n]+)"?/) || [])[1] || Math.floor(10000 + Math.random() * 90000);
+                            const sku = (text.match(/sku:\s*"?([^"\r\n]+)"?/) || [])[1] || 'N/A';
                             const catMatch = text.match(/category:\s*"?([^"\r\n]+)"?/);
                             const category = catMatch ? catMatch[1].trim() : 'Uncategorized';
 
@@ -811,10 +811,13 @@
                 return;
             }
 
-            products.forEach((p, index) => {
+            products.forEach((p) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                card.onclick = () => openProductModal(index);
+                
+                // Title-ஐ வைத்து பாதுகாப்பாக கிளிக் நிகழ்வை அமைத்தல்
+                const safeTitle = p.title.replace(/'/g, "\\'");
+                card.setAttribute('onclick', `openProductModalByTitle('${safeTitle}')`);
 
                 let priceHTML = '';
                 if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
@@ -828,15 +831,17 @@
                     <img src="${p.image || 'https://via.placeholder.com/150'}" alt="${p.title}">
                     <div class="product-title">${p.title}</div>
                     <div class="price-container">${priceHTML}</div>
-                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${p.title.replace(/'/g, "\\'")}', '${p.finalPrice}')">Add to Cart</button>
+                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${safeTitle}', '${p.finalPrice}')">Add to Cart</button>
                 `;
                 container.appendChild(card);
             });
         }
 
         // Open Product Details Modal
-        function openProductModal(index) {
-            const p = allProducts[index];
+        function openProductModalByTitle(title) {
+            const p = allProducts.find(item => item.title === title);
+            if (!p) return;
+
             document.getElementById('modalTitle').innerText = p.title;
             document.getElementById('modalBreadcrumbTitle').innerText = p.title;
             document.getElementById('modalCategory').innerText = p.category;
@@ -848,7 +853,6 @@
             if (p.offerPrice && parseFloat(p.offerPrice) < parseFloat(p.price)) {
                 document.getElementById('modalOldPrice').innerText = 'Rs. ' + p.price;
                 document.getElementById('modalOldPrice').style.display = 'inline';
-                
                 document.getElementById('modalPrice').innerText = p.offerPrice;
 
                 let disc = Math.round(((parseFloat(p.price) - parseFloat(p.offerPrice)) / parseFloat(p.price)) * 100);
@@ -862,7 +866,7 @@
 
             document.getElementById('modalAddToCartBtn').onclick = function() {
                 let qty = parseInt(document.getElementById('modalQty').value) || 1;
-                for(let i=0; i<qty; i++) {
+                for(let i = 0; i < qty; i++) {
                     addToCart(p.title, p.finalPrice);
                 }
                 closeProductModal();
