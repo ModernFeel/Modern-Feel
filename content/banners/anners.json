@@ -1,0 +1,41 @@
+[
+    {
+        "id": 1,
+        "title": "New Collection Arrived",
+        "description": "Discover latest products with amazing prices.",
+        "image": "images/banners/banner-1.jpg",
+        "buttonText": "Shop Now",
+        "link": "#products"
+    },
+
+
+    {
+        "id": 2,
+        "title": "Special Discount Offers",
+        "description": "Save more with our exclusive seasonal offers.",
+        "image": "images/banners/banner-2.jpg",
+        "buttonText": "View Offers",
+        "link": "#offers"
+    },
+
+
+    {
+        "id": 3,
+        "title": "Quality Products At Best Prices",
+        "description": "Fashion, Electronics, Toys and More.",
+        "image": "images/banners/banner-3.jpg",
+        "buttonText": "Explore Now",
+        "link": "#products"
+    },
+
+
+    {
+        "id": 4,
+        "title": "Fast Delivery Service",
+        "description": "Shop online and receive your order safely.",
+        "image": "images/banners/banner-4.jpg",
+        "buttonText": "Order Today",
+        "link": "#contact"
+    }
+
+]
