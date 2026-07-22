@@ -751,17 +751,19 @@
             showSlide(slideIndex);
         }
 
-        // Auto change banner every 6 seconds (Fixed)
+        // Auto change banner every 6 seconds
         setInterval(() => {
             changeSlide(1);
         }, 6000);
 
 
-        // Fetch CMS products safely
+        // Optimized Async Fetch using GitHub Raw URLs & Promise.all (Prevents API Limit)
         async function fetchProducts() {
             const container = document.getElementById('cms-products');
             try {
-                const response = await fetch('https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products');
+                const repoUrl = 'https://api.github.com/repos/ModernFeel/Modern-Feel/contents/content/products';
+                const response = await fetch(repoUrl);
+
                 if (!response.ok) {
                     container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products uploaded yet.</p>';
                     return;
@@ -770,10 +772,13 @@
                 const files = await response.json();
                 allProducts = [];
 
-                for (let file of files) {
-                    if (file.name.endsWith('.md')) {
+                // Load all Markdown files in parallel via GitHub Raw URLs
+                const productPromises = files
+                    .filter(file => file.name.endsWith('.md'))
+                    .map(async file => {
                         try {
-                            const res = await fetch(file.download_url);
+                            const rawUrl = `https://raw.githubusercontent.com/ModernFeel/Modern-Feel/main/content/products/${file.name}`;
+                            const res = await fetch(rawUrl);
                             const text = await res.text();
 
                             const title = (text.match(/title:\s*"?([^"\r\n]+)"?/) || [])[1] || 'Product';
@@ -786,14 +791,18 @@
 
                             const bodyParts = text.split('---');
                             const description = bodyParts.length > 2 ? bodyParts.slice(2).join('---').trim() : 'No description available.';
-                            const finalPrice = offerPrice ? offerPrice : normalPrice;
+                            const finalPrice = (offerPrice && parseFloat(offerPrice) > 0) ? offerPrice : normalPrice;
 
-                            allProducts.push({ title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description });
+                            return { title, price: normalPrice, offerPrice, finalPrice, image, category, sku, description };
                         } catch (e) {
-                            console.error("Error parsing product file:", file.name, e);
+                            console.error("Error reading file:", file.name, e);
+                            return null;
                         }
-                    }
-                }
+                    });
+
+                const results = await Promise.all(productPromises);
+                allProducts = results.filter(p => p !== null);
+
                 renderProducts(allProducts);
             } catch (err) {
                 console.error(err);
@@ -801,7 +810,7 @@
             }
         }
 
-        // Render Products
+        // Render Products Grid
         function renderProducts(products) {
             const container = document.getElementById('cms-products');
             container.innerHTML = '';
